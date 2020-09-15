@@ -2,7 +2,7 @@
   <div>
     <hero :title=heroTitle :subtitle='loadingText' :heroType=heroType />
     <div class='notification is-warning'>
-        <p>Risk of Rain 2 updates may break mods. If a new update has been released, please be patient.</p>
+        <p>{{getTranslation("SPLASH_UPDATE_BANNER")}}</p>
     </div>
     <progress-bar
             :max='requests.length * 100'
@@ -13,8 +13,8 @@
         <aside class='menu'>
           <p class='menu-label'>Help</p>
           <ul class='menu-list'>
-            <li><a @click="view = 'about'" :class="[view === 'about' ? 'is-active' : '']">About</a></li>
-            <li><a @click="view = 'faq'" :class="[view === 'faq' ? 'is-active' : '']">FAQ</a></li>
+            <li><a @click="view = 'about'" :class="[view === 'about' ? 'is-active' : '']">{{getTranslation("ABOUT")}}</a></li>
+            <li><a @click="view = 'faq'" :class="[view === 'faq' ? 'is-active' : '']">{{getTranslation("FAQ")}}</a></li>
             <li>
               <link-component :url="'https://github.com/ebkr/r2modmanPlus'" :target="'external'">
                 <i class="fab fa-github fa-lg" aria-hidden="true"/>
@@ -28,8 +28,8 @@
           <br/>
           <nav class='level' v-if="isOffline">
             <div class='level-item'>
-              <a class='button is-info' @click="continueOffline()">Continue offline</a>&nbsp;
-              <a class='button is-dark' @click="retryConnection()">Try to reconnect</a>
+              <a class='button is-info' @click="continueOffline()">{{getTranslation("CONTINUE_OFFLINE")}}</a>&nbsp;
+              <a class='button is-dark' @click="retryConnection()">{{getTranslation("RETRY_CONNECTION")}}</a>
             </div>
             <br/><br/>
           </nav>
@@ -40,7 +40,7 @@
               <div class='content'>
                 <div class='container' v-if="view !== 'main'">
                     <i class='fas fa-long-arrow-alt-left margin-right'/>
-                    <strong><a @click="view = 'main'">Go back</a></strong>
+                    <strong><a @click="view = 'main'">{{getTranslation("GO_BACK")}}</a></strong>
                     <br/><br/>
                 </div>
                 <div class='container' v-if="view === 'main'">
@@ -49,20 +49,18 @@
                       <i class='fas fa-info-circle'/>
                     </span>
                     &nbsp;
-                    <strong>Did you know?</strong>
+                    <strong>{{getTranslation("DID_YOU_KNOW")}}</strong>
                   </p>
                   <ul class='margin-right'>
                     <li>
                       <p>
-                        You can use the "Install with Mod Manager" button on <link-component
+                        {{getTranslation("INSTALL_MODS_SPLASH_MESSAGE")}} <link-component
                               :url="'https://thunderstore.io'" :target="'external'">Thunderstore</link-component>
-                        with r2modman.
                       </p>
                     </li>
                     <li>
                       <p>
-                        You can export the selected profile from the settings screen as either a file, or a code.
-                        This makes it easy to share your mod list with friends!
+                        {{getTranslation("EXPORT_PROFILE_SPLASH_MESSAGE")}}
                       </p>
                     </li>
                   </ul>
@@ -71,11 +69,10 @@
                       <i class='fas fa-question-circle'/>
                     </span>
                     &nbsp;
-                    <strong>Having trouble?</strong>
+                    <strong>{{getTranslation("HAVING_TROUBLE")}}</strong>
                   </p>
                   <p>
-                    Send a screenshot of the error in the Thunderstore modding discord server. Feel free to ping me
-                    if it doesn't get resolved.
+                      {{getTranslation("HAVING_TROUBLE_DETAIL")}}
                   </p>
                 </div>
                 <div class='container' v-else-if="view === 'about'">
@@ -84,15 +81,15 @@
                       <i class='fas fa-address-card'/>
                     </span>
                     &nbsp;
-                    <strong>About r2modman</strong>
+                    <strong>{{getTranslation("ABOUT")}}</strong>
                   </p>
-                  <p>It's created by Ebkr, using Quasar.</p>
-                  <p>Quasar provides the following development tools that r2modman is built upon:</p>
+                  <p>{{getTranslation("SPLASH_ABOUT_AUTHOR")}}</p>
+                  <p>{{getTranslation("SPLASH_ABOUT_DEV_TOOLS")}}</p>
                   <ul>
-                      <li>Electron</li>
-                      <li>Node</li>
-                      <li>Vue</li>
-                      <li>TypeScript</li>
+                      <li>{{getTranslation("ELECTRON")}}</li>
+                      <li>{{getTranslation("NODE")}}</li>
+                      <li>{{getTranslation("VUE")}}</li>
+                      <li>{{getTranslation("TYPESCRIPT")}}</li>
                   </ul>
                 </div>
                 <div class='container' v-else-if="view === 'faq'">
@@ -101,20 +98,19 @@
                       <i class='fas fa-question-circle'/>
                     </span>
                     &nbsp;
-                    <strong>FAQ</strong>
+                    <strong>{{getTranslation("FAQ")}}</strong>
                   </p>
                   <ul>
                       <li>
-                          <strong><p>How do I get started?</p></strong>
+                          <strong><p>{{getTranslation("HOW_DO_I_GET_STARTED")}}</p></strong>
                           <p>
-                              Head on over to the online tab, and download BepInEx and R2API.
+                              {{getTranslation("HOW_DO_I_GET_STARTED_ANSWER")}}
                           </p>
                       </li>
                     <li>
-                      <strong><p>Starting the game with mods</p></strong>
+                      <strong><p>{{getTranslation("HOW_DO_I_START_MODDED")}}</p></strong>
                       <p>
-                        You have to start the game from within the manager. Starting through Steam will not work
-                        without taking manual steps.
+                        {{getTranslation("HOW_DO_I_START_MODDED_ANSWER")}}
                       </p>
                     </li>
                   </ul>
@@ -148,6 +144,7 @@ import * as fs from 'fs-extra';
 import ThemeManager from '../r2mm/manager/ThemeManager';
 import { Logger, LogSeverity } from '../r2mm/logging/Logger';
 import FolderMigration from '../migrations/FolderMigration';
+import Translation from '../lang/translation';
 
 @Component({
     components: {
@@ -262,6 +259,12 @@ export default class Splash extends Vue {
             ipcRenderer.send('get-is-portable');
         });
         ipcRenderer.send('get-appData-directory');
+    }
+
+    getTranslation(translationKey: string, ...params: any[]) {
+        const translationFunction = Object.entries(Translation.en)
+            .filter(([key]) => key === translationKey)[0];
+        return translationFunction[1](...params);
     }
 }
 </script>
