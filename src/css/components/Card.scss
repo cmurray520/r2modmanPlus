@@ -1,0 +1,90 @@
+@mixin button-hover-effect ($margin: 10px, $is-border: false) {
+    // these two lines allow the hover effect's pseudo-element to position itself behind the element's text, with a bit of a margin
+    position: relative;
+	z-index: 1;
+	
+    &::before {
+        content: "";
+        display: block;
+		position: absolute;
+        top: $margin;
+        left: $margin;
+        width: calc(100% - #{$margin * 2});
+        height: calc(100% - #{$margin * 2});
+        z-index: -1;
+        background-color: transparent;
+        border: 1px solid $scheme-border-secondary;
+        border-radius: 4px;
+    }
+
+    &:hover, &:active, &:focus, &:focus-within {
+        color: #ffffff;
+        &::before {
+			@if $is-border {
+				border-color: $scheme-border-hover;
+				
+			} @else {
+				background-color: $scheme-primary;
+				border: 0;
+			}
+		}
+		@content;
+    }
+}
+
+.card {
+	&--is-disabled {
+		.mod-logo, .card-title, .card-content {
+			opacity: 0.6;
+		}
+	}
+	
+	&--is-clickable {
+		display: block;
+		padding: 8px;
+		
+		.requires-card-hover {
+			display: none;
+		}
+		
+		--hovered: 0;
+		
+		@include button-hover-effect($margin: 4px, $is-border: true) {
+			--link: #{$scheme-link-hover};
+			--hovered: 1;
+		
+			.requires-card-hover {
+				display: block;
+			}
+		}
+	}
+}
+	
+.button.card-header-icon {
+	background: none;
+	border: none;
+	height: auto;
+	padding: 0 calc(0.5rem + 0.2rem * var(--hovered)) 0 calc(0.5rem + 0.5rem * var(--hovered));
+	margin: calc(0.5rem * var(--hovered));
+	
+	color: $scheme-link;
+	&:hover, &:focus, &:active {
+		color: $scheme-link-hover;
+	}
+}
+
+.card-footer-borderless, .card-footer-borderless .card-footer-item {
+    border: none !important;
+}
+
+.card-footer-item:not(.non-selectable) {
+	@include button-hover-effect;
+}
+
+.card-byline, .card-timestamp {
+    color:$scheme-text-secondary;
+}
+
+.card-timestamp strong {
+    color: inherit;
+}
