@@ -34,7 +34,14 @@ const enDefinition: LangInterface = {
 
     // Manager.vue
     INSTALLED: () => "Installed",
-    INSTALLED_COUNT: (count: number) => `Installed ${count}`
+    INSTALLED_COUNT: (count: number) => `Installed ${count}`,
+    CHECKING_FOR_UPDATES: () => "Checking for updates",
+    STARTING_R2MODMAN: () => "Starting r2modman",
+    INITIALISING: () => "Initialising",
+    PREPARING: () => "Preparing",
+    DOWNLOADING_EXCLUSIONS: () => "Downloading exclusions",
+    CONNECTING_TO_THUNDERSTORE: () => "Connecting to Thunderstore",
+    GETTING_MOD_LIST_FROM_THUNDERSTORE: () => "Getting mod list from Thunderstore"
 }
 
 export default enDefinition;

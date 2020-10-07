@@ -24,12 +24,12 @@
         </aside>
       </div>
       <div class='column is-three-quarters'>
-        <div class='container'>
+        <div class='container margin-right'>
           <br/>
           <nav class='level' v-if="isOffline">
             <div class='level-item'>
               <a class='button is-info' @click="continueOffline()">{{getTranslation("CONTINUE_OFFLINE")}}</a>&nbsp;
-              <a class='button is-dark' @click="retryConnection()">{{getTranslation("RETRY_CONNECTION")}}</a>
+              <a class='button' @click="retryConnection()">{{getTranslation("RETRY_CONNECTION")}}</a>
             </div>
             <br/><br/>
           </nav>
@@ -154,8 +154,8 @@ import Translation from '../lang/translation';
     }
 })
 export default class Splash extends Vue {
-    heroTitle: string = 'Starting r2modman';
-    loadingText: string = 'Initialising';
+    heroTitle: string = this.getTranslation("STARTING_R2MODMAN");
+    loadingText: string = this.getTranslation("INITIALISING");
     heroType: string = 'is-info';
     view: string = 'main';
     requests = [
@@ -174,7 +174,7 @@ export default class Splash extends Vue {
 
     // Ensure that r2modman isn't outdated.
     private checkForUpdates() {
-        this.loadingText = 'Preparing';
+        this.loadingText = this.getTranslation("PREPARING");
         ipcRenderer.once('update-done', ()=>{
             this.getRequestItem('UpdateCheck').setProgress(100);
             this.getExclusions();
@@ -186,7 +186,7 @@ export default class Splash extends Vue {
         this.loadingText = 'Connecting to GitHub repository';
         axios.get('https://raw.githubusercontent.com/ebkr/r2modmanPlus/master/modExclusions.md', {
             onDownloadProgress: progress => {
-                this.loadingText = 'Downloading exclusions'
+                this.loadingText = this.getTranslation("DOWNLOADING_EXCLUSIONS");
                 this.getRequestItem('ExclusionsList').setProgress((progress.loaded / progress.total) * 100);
             }
         }).then(response => {
@@ -207,10 +207,10 @@ export default class Splash extends Vue {
 
     // Get the list of Thunderstore mods via /api/v1/package.
     private getThunderstoreMods(attempt: number) {
-        this.loadingText = 'Connecting to Thunderstore';
+        this.loadingText = this.getTranslation("CONNECTING_TO_THUNDERSTORE");
         axios.get('https://thunderstore.io/api/v1/package', {
             onDownloadProgress: progress => {
-                this.loadingText = 'Getting mod list from Thunderstore'
+                this.loadingText = this.getTranslation("GETTING_MOD_LIST_FROM_THUNDERSTORE");
                 this.getRequestItem('ThunderstoreDownload').setProgress((progress.loaded / progress.total) * 100);
             }
         }).then(response => {

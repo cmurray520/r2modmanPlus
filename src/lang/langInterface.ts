@@ -23,5 +23,12 @@ export default interface LangInterface {
     HOW_DO_I_GET_STARTED_ANSWER: (...params: any[]) => string;
     HOW_DO_I_START_MODDED: (...params: any[]) => string;
     HOW_DO_I_START_MODDED_ANSWER: (...params: any[]) => string;
+    CHECKING_FOR_UPDATES: (...params: any[]) => string;
+    STARTING_R2MODMAN: (...params: any[]) => string;
+    INITIALISING: (...params: any[]) => string;
+    PREPARING: (...params: any[]) => string;
+    DOWNLOADING_EXCLUSIONS: (...params: any[]) => string;
+    CONNECTING_TO_THUNDERSTORE: (...params: any[]) => string;
+    GETTING_MOD_LIST_FROM_THUNDERSTORE: (...params: any[]) => string;
 
 }
