@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class='sticky-top sticky-top--search border-at-bottom'>
-            <div class='card is-shadowless'>
+            <div class='card is-shadowless is-square'>
                 <div class='card-header-title'>
                     <span class="non-selectable">Search:&nbsp;&nbsp;</span>
                     <input v-model='search' class="input" type="text" placeholder="Search for a setting"/>
@@ -185,6 +185,14 @@
                 () => 'These commands are used against the Steam.exe on game startup',
                 'fa-wrench',
                 () => this.emitInvoke('SetLaunchParameters')
+            ),
+            new SettingsRow(
+                'Debugging',
+                'Clean mod cache',
+                'Free space caused by mods not currently in a profile.',
+                () => 'Check all profiles for unused mods and clear cache',
+                'fa-trash',
+                () => this.emitInvoke('CleanCache')
             ),
             new SettingsRow(
                 'Profile',

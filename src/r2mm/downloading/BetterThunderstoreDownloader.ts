@@ -81,10 +81,7 @@ export default class BetterThunderstoreDownloader {
         return builder;
     }
 
-    public static downloadLatestOfAll(mods: ManifestV2[], allMods: ThunderstoreMod[],
-                                      callback: (progress: number, modName: string, status: number, err: R2Error | null) => void,
-                                      completedCallback: (modList: ThunderstoreCombo[]) => void) {
-
+    public static getLatestOfAllToUpdate(mods: ManifestV2[], allMods: ThunderstoreMod[]): ThunderstoreCombo[] {
         const dependencies: ThunderstoreCombo[] = [];
         mods.forEach(value => {
             const tsMod = ModBridge.getThunderstoreModFromMod(value, allMods);
@@ -96,6 +93,22 @@ export default class BetterThunderstoreDownloader {
                 dependencies.push(combo);
             }
         });
+        return dependencies.filter(value => {
+            const result = mods.find(value1 => {
+                return value1.getName() === value.getMod().getFullName();
+            });
+            if (result !== undefined) {
+                return !result.getVersionNumber().isEqualTo(value.getVersion().getVersionNumber());
+            }
+            return false;
+        });
+    }
+
+    public static downloadLatestOfAll(mods: ManifestV2[], allMods: ThunderstoreMod[],
+                                      callback: (progress: number, modName: string, status: number, err: R2Error | null) => void,
+                                      completedCallback: (modList: ThunderstoreCombo[]) => void) {
+
+        const dependencies: ThunderstoreCombo[] = this.getLatestOfAllToUpdate(mods, allMods);
 
         let downloadCount = 0;
         const downloadableDependencySize = this.calculateInitialDownloadSize(ManagerSettings.getSingleton(), dependencies);
@@ -249,21 +262,24 @@ export default class BetterThunderstoreDownloader {
             onDownloadProgress: progress => {
                 callback((progress.loaded / progress.total) * 100, StatusEnum.PENDING, null);
             },
-            responseType: 'arraybuffer'
+            responseType: 'arraybuffer',
+            headers: {
+                'Content-Type': 'application/zip'
+            }
         }).then(response => {
             const buf: Buffer = Buffer.from(response.data)
             callback(100, StatusEnum.PENDING, null);
-            this.saveToFile(buf, combo, (success: boolean) => {
+            this.saveToFile(buf, combo, (success: boolean, error?: R2Error) => {
                 if (success) {
-                    callback(100, StatusEnum.SUCCESS, null);
+                    callback(100, StatusEnum.SUCCESS, error || null);
                 } else {
-                    callback(100, StatusEnum.FAILURE, null);
+                    callback(100, StatusEnum.FAILURE, error || null);
                 }
             });
         })
     }
 
-    private static saveToFile(response: Buffer, combo: ThunderstoreCombo, callback: (success: boolean) => void): R2Error | null {
+    private static saveToFile(response: Buffer, combo: ThunderstoreCombo, callback: (success: boolean, error?: R2Error) => void): R2Error | null {
         try {
             fs.ensureDirSync(path.join(cacheDirectory, combo.getMod().getFullName()));
             fs.writeFileSync(
